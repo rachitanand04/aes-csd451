@@ -1,8 +1,7 @@
 import java.util.Arrays;
 
-public class Encrypt {
+public class Decrypt {
     private Boolean printSteps;
-
     private static final int[][] Rcon = {
             { 0x01, 0x00, 0x00, 0x00 },
             { 0x02, 0x00, 0x00, 0x00 },
@@ -15,40 +14,55 @@ public class Encrypt {
             { 0x1b, 0x00, 0x00, 0x00 },
             { 0x36, 0x00, 0x00, 0x00 }
     };
-
-    public Encrypt(Boolean printSteps) {
+    public Decrypt(Boolean printSteps) {
         this.printSteps = printSteps;
     }
 
-    public void encryptString(String[][] message, String[][] key, String keyString) {
-        addRoundKey(message, key);
-        printState(message, "Add key");
+    // public void decryptString(String[][] message, String[][] key, String keyString) {
+    //     String[][] expandedKeys = keyExpansion(keyString);
+    //     addRoundKey(message, expandedKeys, 10);
+    //     performSubstitution(message);
+    //     shiftRows(message);
+    //     for (int i = 0; i < 9; i++) {
+    //         addRoundKey(message, expandedKeys, 9 - i);
+    //         mixColumns(message);
+    //         shiftRows(message);
+    //         performSubstitution(message);
+
+    //     }
+    //     addRoundKey(message, key);
+    // }
+    public void decryptString(String[][] message, String[][] key, String keyString) {
         String[][] expandedKeys = keyExpansion(keyString);
+        addRoundKey(message, expandedKeys, 10);
+        printState(message, "Add round key");
+    
         for (int i = 0; i < 9; i++) {
-            if(printSteps) System.out.println("Round " + (i + 1));
-
-            performSubstitution(message);
-            printState(message,"Substitution");
-
+            if(printSteps) System.out.println("Round " + (10 - i));
+    
             shiftRows(message);
             printState(message, "Shift rows");
-
+    
+            performSubstitution(message);
+            printState(message, "Substitution");
+    
+            addRoundKey(message, expandedKeys, 9 - i);
+            printState(message, "Add round key");
+    
             mixColumns(message);
-            printState(message, "Printstates");
-
-            addRoundKey(message, expandedKeys, i + 1);
-            printState(message, "addRoundKey");
+            printState(message, "Mix columns");
         }
-        if(printSteps) System.out.println("Round 10");
-        performSubstitution(message);
-        printState(message,"Substitution");
-
+    
         shiftRows(message);
-        printState(message,"Shift rows");
-
-        addRoundKey(message, expandedKeys, 10);
-        printState(message,"Add round key");
+        printState(message, "Shift rows");
+    
+        performSubstitution(message);
+        printState(message, "Substitution");
+    
+        addRoundKey(message, key);
+        printState(message, "Add key");
     }
+    
 
     private void addRoundKey(String[][] state, String[][] roundKey) {
         for (int i = 0; i < 4; i++) {
@@ -132,7 +146,7 @@ public class Encrypt {
         SBox sBox = new SBox();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                array[i][j] = sBox.getSBoxValue(array[i][j]);
+                array[i][j] = sBox.getInvSBoxValue(array[i][j]);
             }
         }
     }
@@ -149,15 +163,15 @@ public class Encrypt {
             temp[i] = array[i];
         }
         for (int i = 0; i < 4; i++) {
-            array[i] = temp[(i + n) % 4];
+            array[i] = temp[(i - n + 4) % 4];
         }
     }
 
     private final int[][] mixColumnMatrix = {
-            { 0x02, 0x03, 0x01, 0x01 },
-            { 0x01, 0x02, 0x03, 0x01 },
-            { 0x01, 0x01, 0x02, 0x03 },
-            { 0x03, 0x01, 0x01, 0x02 }
+            { 0x0E, 0x0B, 0x0D, 0x09 },
+            { 0x09, 0x0E, 0x0B, 0x0D },
+            { 0x0D, 0x09, 0x0E, 0x0B },
+            { 0x0B, 0x0D, 0x09, 0x0E }
     };
 
     private void mixColumns(String[][] state) {
