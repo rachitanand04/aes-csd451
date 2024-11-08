@@ -40,19 +40,19 @@ public class App {
         System.out.println("Plaintext");
         hexPrint(temp);
 
-        Encrypt encrypt = new Encrypt(false);
+        Encrypt encrypt = new Encrypt(true);
         encrypt.encryptString(hexStrings, keyStrings, roundKey);
         System.out.println("Ciphertext");
         hexPrint(hexStrings);
 
-        Decrypt decrypt = new Decrypt(false);
+        Decrypt decrypt = new Decrypt(true);
         decrypt.decryptString(hexStrings, keyStrings, roundKey);
         System.out.println("Decrypted Message");
         hexPrint(hexStrings);
 
         Encrypt imageEncrypt = new Encrypt(false);
 
-        byte[] byteArray = extractBytes("Images/lock.ppm");
+        byte[] byteArray = extractBytes("Images/lock.ppm");  
         // System.out.println(Arrays.toString(byteArrayToHexArray(byteArray)));
         PpmHeaderHandler handler = new PpmHeaderHandler();
         // System.out.println(Arrays.toString(byteArray));
