@@ -7,8 +7,8 @@ public class App {
 
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
-        String message = "Two One Nine Two";
-        String roundKey = "Thats my Kung Fu";
+        String message = "Absentmindedness";
+        String roundKey = "Cryptographycsd3";
         // System.out.println("Enter 16 character plaintext");
         // message = scanner.nextLine();
         // System.out.println("Enter 16 character key");
@@ -40,12 +40,12 @@ public class App {
         System.out.println("Plaintext");
         hexPrint(temp);
 
-        Encrypt encrypt = new Encrypt(true);
+        Encrypt encrypt = new Encrypt(false);
         encrypt.encryptString(hexStrings, keyStrings, roundKey);
         System.out.println("Ciphertext");
         hexPrint(hexStrings);
 
-        Decrypt decrypt = new Decrypt(true);
+        Decrypt decrypt = new Decrypt(false);
         decrypt.decryptString(hexStrings, keyStrings, roundKey);
         System.out.println("Decrypted Message");
         hexPrint(hexStrings);

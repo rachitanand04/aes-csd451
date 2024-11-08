@@ -34,7 +34,7 @@ public class Encrypt {
             printState(message, "Shift rows");
 
             mixColumns(message);
-            printState(message, "Printstates");
+            printState(message, "Mix Columns");
 
             addRoundKey(message, expandedKeys, i + 1);
             printState(message, "addRoundKey");
